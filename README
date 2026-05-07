@@ -1,0 +1,34 @@
+## Descrizione
+
+All'interno della repository è possibile visualizzare ed eseguire gli script, scritti in linguaggio python, riguardo
+l'elaborazione del segnale elettroencefalografico di 109 pazienti a cui sono state richieste task di motor movement/imagery.
+L'elaborazione ha come fine ultimo l'addestramento di un classificatore da implementare in un sistema BCI.
+Nel progetto vengono seguita l'ordinaria pipeline del signal processing: pre-processing, feature selection e classification.
+Il dataset, il cui accesso è spiegato nei paragrafi successivi, è stato qui modificato per una maggiore praticità: 
+- I dati nella forma ".edf" e ".edf.event" sono stati raggruppati nella cartella rawdata
+- I dati effettivamente utilizzati e quindi quelli conformi allo standard BIDS (sub-xxx) sono stati raggruppati nella cartella data
+Nella cartella è già presente il file "participants.tsv" oppurtanamente modificato per essere compatibile con la libreria python mne
+Il codice scritto personalmente è visualizzabile nella cartella src
+
+## Accesso al dataset
+
+Il dataset e tutte le informazioni correlate sono visualizzabili su queste fonti ufficiali:
+
+- OpenNeuro (versione 1.0.0):  
+	https://openneuro.org/datasets/ds004362/versions/1.0.0
+
+- Pubblicazione/dataset originale su PhysioBank (EEG Motor Movement/Imagery):  
+	https://physionet.org/content/eegmmidb/1.0.0/
+
+Per questo progetto è stata utilizzata la versione di OpenNeuro.
+
+### Procedura richiesta
+
+1. Apri il link OpenNeuro.
+2. Scarica i file del dataset. Sarà sufficiente spostare i dati dei pazienti. Gli altri file sono caricati nella repository di github.
+3. Estrai/copia in questo folder i dati inserendoli opportunatamente nelle cartelle data e rawdata. Ricordiamo che data rawdata contiene i dati grezzi in formato edf e edf.event, mentre in data sono presenti i file conformi allo standard bids, dunque il formato .set affiancato dai tsv e dai json
+4. Per evitare alcuni warning eseguire lo script "modificaTsv" una volta. 
+
+
+## Acknowledgements
+This data set was originally created and contributed to PhysioBank by Gerwin Schalk (schalk at wadsworth dot org) and his colleagues at the BCI R&D Program, Wadsworth Center, New York State Department of Health, Albany, NY. W.A. Sarnacki collected the data. Aditya Joshi compiled the dataset and prepared the documentation. D.J. McFarland and J.R. Wolpaw were responsible for experimental design and project oversight, respectively. This work was supported by grants from NIH/NIBIB (EB006356 (GS) and EB00856 (JRW and GS)).

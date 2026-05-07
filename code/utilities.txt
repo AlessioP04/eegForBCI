@@ -1,0 +1,30 @@
+File Da professionalizzare, contenente alcuni frammenti di codice utile
+
+----------------------------
+Inidividuare bad Channel tramite varianza anomala: 
+data = raw.get_data()
+
+variances = np.var(data, axis=1)
+
+threshold_high = np.mean(variances) + 3*np.std(variances)
+threshold_low = np.mean(variances) - 3*np.std(variances)
+
+bad_var = np.where((variances > threshold_high) | (variances < threshold_low))[0]
+bad_channels = [raw.ch_names[i] for i in bad_var]
+
+print("Bad (varianza):", bad_channels)
+
+
+------------------------------
+Inidividuare bad Channel tramite correlazione: 
+
+corr = np.corrcoef(data)
+
+mean_corr = np.mean(corr, axis=1)
+
+threshold = np.mean(mean_corr) - 3*np.std(mean_corr)
+
+bad_corr = np.where(mean_corr < threshold)[0]
+bad_channels_corr = [raw.ch_names[i] for i in bad_corr]
+
+print("Bad (correlazione):", bad_channels_corr)
