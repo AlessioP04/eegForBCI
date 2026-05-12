@@ -1,0 +1,16 @@
+TEST PER VERIFICARE LE ETICHETTE DELLE FINESTRE
+y_binary = np.where(y == 1, 0, 1)
+# Stampo il valore di y_binary e il corrispettivo istante di tempo per verificare sia coerente con gli eventi
+for i in range(len(y_binary)):
+    start_sample = i * step_samples
+    start_time = start_sample / sfreq
+
+    print(
+        f"Finestra {i}: "
+        f"y={y_binary[i]}, "
+        f"start_time={start_time:.2f}s"
+    )
+
+event_times = events[:, 0] / sfreq
+
+print(event_times)

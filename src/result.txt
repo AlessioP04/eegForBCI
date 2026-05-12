@@ -1,0 +1,43 @@
+---------------------------------------------------------------------------------------
+Epoch, CSP su ogni singolo paziente e conseguente SVM con gridSearch. Valutazione: due run di train e ultima di test.
+Classificazione rest vs azione.
+I risultati migliorano leggermente se si confronta il pensiero sinistro vs destro
+I risultati qui mostrati solo il best param, non i risultati sulla run di test, decisamente peggiori.
+
+Best score: 0.5666666666666667
+Best params: {'csp__log': True, 'csp__n_components': 4, 'svm__C': 100, 'svm__kernel': 'linear'}
+Best score: 0.5166666666666667
+Best params: {'csp__log': True, 'csp__n_components': 2, 'svm__C': 100, 'svm__kernel': 'linear'}
+Best score: 0.7
+Best params: {'csp__log': True, 'csp__n_components': 6, 'svm__C': 1, 'svm__kernel': 'linear'}
+Best score: 0.9166666666666666
+Best params: {'csp__log': True, 'csp__n_components': 2, 'svm__C': 0.1, 'svm__kernel': 'linear'}
+Best score: 0.6833333333333333
+Best params: {'csp__log': True, 'csp__n_components': 6, 'svm__C': 1, 'svm__kernel': 'rbf'}
+Best score: 0.6000000000000001
+Best params: {'csp__log': True, 'csp__n_components': 8, 'svm__C': 10, 'svm__kernel': 'rbf'}
+Best score: 0.8666666666666666
+Best params: {'csp__log': True, 'csp__n_components': 8, 'svm__C': 1, 'svm__kernel': 'rbf'}
+Best score: 0.55
+Best params: {'csp__log': True, 'csp__n_components': 8, 'svm__C': 10, 'svm__kernel': 'linear'}
+Best score: 0.6000000000000001
+Best params: {'csp__log': True, 'csp__n_components': 2, 'svm__C': 10, 'svm__kernel': 'rbf'}
+---------------------------------------------------------------------------------------
+Window, CSP su ogni singolo paziente e conseguente SVM con gridSearch. Valutazione: due run di train e ultima di test.
+Finestre di 2 secondi con passo 0,5. No re-referencing, filtro 1-30 Hz, threshold = 0.5. No StandardScaler
+
+Best score: 0.691123188405797
+Best params: {'csp__log': True, 'csp__n_components': 4, 'svm__C': 10, 'svm__gamma': 'scale', 'svm__kernel': 'rbf'}
+Accuratezza reale su RUN 12 (Test Set): 0.5883
+Best score: 0.7351449275362318
+Best params: {'csp__log': True, 'csp__n_components': 4, 'svm__C': 1, 'svm__gamma': 'scale', 'svm__kernel': 'rbf'}
+Accuratezza reale su RUN 12 (Test Set): 0.6673
+Best score: 0.7295289855072463
+Best params: {'csp__log': True, 'csp__n_components': 6, 'svm__C': 10, 'svm__gamma': 'auto', 'svm__kernel': 'rbf'}
+Accuratezza reale su RUN 12 (Test Set): 0.5833
+Best score: 0.6108695652173912
+Best params: {'csp__log': True, 'csp__n_components': 4, 'svm__C': 0.1, 'svm__gamma': 'auto', 'svm__kernel': 'rbf'}
+Accuratezza reale su RUN 12 (Test Set): 0.5482
+Best score: 0.5583333333333332
+Best params: {'csp__log': True, 'csp__n_components': 2, 'svm__C': 10, 'svm__gamma': 'scale', 'svm__kernel': 'linear'}
+Accuratezza reale su RUN 12 (Test Set): 0.5314

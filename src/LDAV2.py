@@ -1,9 +1,9 @@
-import mne 
+import mne
 from mne_bids import BIDSPath, read_raw_bids
-from scipy.signal import welch
 import numpy as np
+from sklearn.decomposition import PCA
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
-from sklearn.model_selection import cross_val_score, cross_validate, StratifiedKFold
+from sklearn.model_selection import cross_validate, StratifiedKFold
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import make_pipeline
 from pathlib import Path
@@ -11,8 +11,12 @@ from pathlib import Path
 
 # Utility per estrarre bande di potenza a precise frequenze
 def band_power(psds, freqs, fmin, fmax):
-    idx = np.logical_and(freqs >= fmin, freqs <= fmax)  # Estratto i valori di frequenza compresi tra quelli richiesti
-    return psds[:, :, idx].mean(axis=2) # Ritorno i valori della potenza associati a quelle frequenze
+    idx = np.logical_and(freqs >= fmin, freqs < fmax)
+    band_freqs = freqs[idx]
+    if band_freqs.size == 0:
+        return np.zeros(psds.shape[:2])
+    band_psd = psds[:, :, idx]
+    return np.trapezoid(band_psd, band_freqs, axis=2)
 
 root = Path(__file__).resolve().parent.parent / "data"      # Path per il dataset
 runs = ["4", "8", "12"]   # Le run che vengono prese in considerazione
@@ -20,7 +24,7 @@ X_all = []  # Vettore X con tutti i dati di tutte le finestre
 y_all = []  # Vettore y con tutte le etichette di tutte le finestre
 
 # Eseguiamo la scansione di tutti i soggetti 
-for i in range(1, 70):
+for i in range(1, 4):
     subject = f"{i:03d}"
     # Per ogni soggetto eseguiamo la scansione sulle run di nostro interesse
     for run in runs:
@@ -70,47 +74,34 @@ for i in range(1, 70):
             # Concatenando le finestre si ottiene una matrice tridimensionale 
             windows = np.array(windows)  # forma: (n_windows, n_channels, window_samples)
 
-            # print(f"Numero finestre: {windows.shape[0]}")
             # print(f"Numero canali e campioni per finestra:{windows.shape[1]}, {windows.shape[2]}")
             
-            # Selezioniamo solo i canali di nostro interesse (TODO: eseguire la segmentazione solo sui canali di interesse)
-            preferred_channels = ["C3", "Cz", "C4"]
-            picks = mne.pick_channels(raw.ch_names, preferred_channels)
-            windows_central = windows[:, picks, :]
+            # Selezioniamo solo i canali di nostro interesse
+            # preferred_channels = ["C3", "Cz", "C4"]
+            # picks = mne.pick_channels(raw.ch_names, preferred_channels)
+            # windows_central = windows[:, picks, :]
 
+            # Fase 3: feature extraction (potenza di banda)
+            n_fft = min(256, window_samples)
+            psds, freqs = mne.time_frequency.psd_array_welch(
+                windows,
+                sfreq=sfreq,
+                fmin=1,
+                fmax=45,
+                n_fft=n_fft,
+                n_overlap=0,
+                average="mean",
+                verbose=False,
+            )
 
-            # Fase 3: feature selection
-            # Inizializzo l'array dove memorizzo i psd
-            psds = []
-            freqs = None
-            # Scorro su tutte le finestre
-            for w in windows_central:
-                psd_window = []
-                # Scorro sui canali di ogni finestra (non tutti, quelli precedentemente estratti)
-                for ch in w:
-                    f, p = welch(ch, fs=sfreq, nperseg=160) # f=asse delle frequenze, p=potenza associata ad ogni f
-                    psd_window.append(p)
-                
-                psds.append(psd_window)
-                
-                if freqs is None:
-                    freqs = f
-
-            psds = np.array(psds)
             theta = band_power(psds, freqs, 4, 8)
-            alpha = band_power(psds, freqs, 8, 12)
-            beta  = band_power(psds, freqs, 12, 30)
-            gamma = band_power(psds, freqs, 30, 45)
-            # Stampa la media della potenza nelle bande di frequenza per ogni canale e finestra
-            # print("Media della potenza nelle bande di frequenza:")
-            # print(f"Theta: {np.mean(theta, axis=0)}")
-            # print(f"Alpha: {np.mean(alpha, axis=0)}")
-            # print(f"Beta: {np.mean(beta, axis=0)}")
-            # print(f"Gamma: {np.mean(gamma, axis=0)}")
+            alpha = band_power(psds, freqs, 8, 13)
+            beta = band_power(psds, freqs, 13, 30)
 
-            # Concateno i segnali così ottenuti 
-            X = np.concatenate([theta, alpha, beta, gamma], axis=1)  
-            X = np.log(X)   # Log-normalizzo per avere valori più stabili
+            # Concateno le bande (n_windows, n_channels * 3)
+            features = np.concatenate([theta, alpha, beta], axis=1)
+            features = np.log10(features + 1e-12)
+            X = features
             
 
             # Fase 3.B Assegno le etichette ad ogni finestra temporale
@@ -172,6 +163,7 @@ print("Distribuzione classi:", dict(zip(unique, counts)))
 # Pipeline: scaling + LDA
 clf = make_pipeline(
     StandardScaler(),
+    PCA(n_components=10, random_state=0),
     LinearDiscriminantAnalysis(solver='svd')  # robusto e stabile
 )
 
