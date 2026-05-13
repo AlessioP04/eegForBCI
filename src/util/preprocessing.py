@@ -3,6 +3,7 @@
 import numpy as np
 
 # Crea sliding window sui dati raw. Restituisce una matrice tridimensionale con tutte le finestre, la dimensione della finestra in campioni, la dimensione dello step in campioni e il numero totale di campioni.
+# METODO TESTATO MANUALMENTE: LE FINESTRE CREATE CORRISPONDONO CON I VALORI DI RAW
 def create_sliding_windows(raw, window_size, step_size):
     sfreq = raw.info['sfreq']
 

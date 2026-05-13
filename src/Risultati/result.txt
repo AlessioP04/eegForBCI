@@ -41,3 +41,13 @@ Accuratezza reale su RUN 12 (Test Set): 0.5482
 Best score: 0.5583333333333332
 Best params: {'csp__log': True, 'csp__n_components': 2, 'svm__C': 10, 'svm__gamma': 'scale', 'svm__kernel': 'linear'}
 Accuratezza reale su RUN 12 (Test Set): 0.5314
+
+
+
+----------------------------------------------------------------------------------------
+Window, CSP su ogni paziente e SVM conseguente con gridSearch. Valutazione: due run di train e ultima di test.
+Finestre più brevi, 1.5 secondi con passo di 0.3s. Filtro 8-30Hz, re-referencing, threshold 0.8, sono canali C, Cp, Fc 
+Misurazione piedi/gambe immaginate. StandardScaler. Sopra il risultato con CSP, sotto con PCA
+
+Accuratezza media: 0.6831168831168831
+Accuratezza media: 0.6285714285714284

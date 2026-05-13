@@ -1,6 +1,4 @@
 f_classif di sklearn
-feature reduction e capire dove arrivo
-PCA fa automaticamente CSP (circa diciamo)
 Rimozione artefatto ICA
 PCA per analisi segnale oppure ICA più avanti
 
