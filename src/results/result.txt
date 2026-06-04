@@ -51,3 +51,7 @@ Misurazione piedi/gambe immaginate. StandardScaler. Sopra il risultato con CSP, 
 
 Accuratezza media: 0.6831168831168831
 Accuratezza media: 0.6285714285714284
+
+
+
+---------------------------------------------------------------------------------------------
