@@ -48,6 +48,7 @@ def create_window_labels(
         end = start + window_samples
         window_labels = labels_per_sample[start:end]
 
+        # Calcola la media delle etichette nella finestra e assegna l'etichetta più frequente se supera la soglia
         frac_left = np.mean(window_labels == 2)
         frac_right = np.mean(window_labels == 3)
 
